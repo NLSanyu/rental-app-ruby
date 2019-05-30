@@ -1,0 +1,6 @@
+POSTGRES_USER: 'postgres'
+POSTGRES_PASSWORD: 'memine'
+POSTGRES_HOST: 'localhost'
+POSTGRES_DB: 'rental-db'
+POSTGRES_TEST_DB: 'rental-test-db'
+PERMISSIONS: 'SOME PERMISSIONS'
