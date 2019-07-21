@@ -4,6 +4,7 @@ class CreateUnits < ActiveRecord::Migration[5.2]
       t.string :unit_code
       t.string :area
       t.string :price
+      t.references :group, foreign_key: true
 
       t.timestamps
     end
