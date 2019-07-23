@@ -30,6 +30,12 @@ class GroupsController < ApplicationController
     head :no_content
   end
 
+  def search
+    @groups = GroupsIndex.query(query_string: { fields: [:group_code, :name, :location, :description], query: search_params[:query], default_operator: 'and' })
+
+    render json: @groups.to_json, status: :ok
+  end
+
   private
 
   def group_params
@@ -39,6 +45,10 @@ class GroupsController < ApplicationController
 
   def set_group
     @group = Group.find(params[:id])
+  end
+
+  def search_params
+    params.permit(:query, :page, :per)
   end
 
 end
