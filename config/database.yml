@@ -6,7 +6,7 @@ default: &default
 development:
   <<: *default
   database: rental-db
-  username: postgres
+  username: lydia
   password: memine
   host: localhost
 
@@ -16,7 +16,7 @@ development:
 test:
   <<: *default
   database: rental-test-db
-  username: postgres
+  username: lydia
   password: memine
 
 production:

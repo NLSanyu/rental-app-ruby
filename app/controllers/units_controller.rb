@@ -30,10 +30,16 @@ class UnitsController < ApplicationController
     head :no_content
   end
 
+  def search
+    @units = UnitsIndex.query(query_string: { fields: [:unit_code, :area, :price], query: search_params[:query], default_operator: 'and' })
+
+     render json: @units.to_json, status: :ok
+  end
+
   private
 
   def unit_params
-    params.permit(:name, :done)
+    params.permit(:unit_code, :area, :price)
   end
 
   def set_group
@@ -41,6 +47,10 @@ class UnitsController < ApplicationController
   end
 
   def set_group_unit
-    @unit = @group.uints.find_by!(id: params[:id]) if @group
+    @unit = @group.units.find_by!(id: params[:id]) if @group
+  end
+
+  def search_params
+    params.permit(:query, :page, :per)
   end
 end
