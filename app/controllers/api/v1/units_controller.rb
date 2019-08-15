@@ -1,74 +1,56 @@
-class UnitsController < ApplicationController
-  before_action :set_unit, only: [:show, :edit, :update, :destroy]
+class Api::V1::UnitsController < Api::V1::BaseController
+  before_action :set_group
+  before_action :set_group_unit, only: [:show, :update, :destroy]
 
-  # GET /units
-  # GET /units.json
+  # GET /groups/:group_id/units
   def index
-    @units = Unit.all
+    json_response(@group.units)
   end
 
-  # GET /units/1
-  # GET /units/1.json
+  # GET /groups/:group_id/units/:id
   def show
+    json_response(@unit)
   end
 
-  # GET /units/new
-  def new
-    @unit = Unit.new
-  end
-
-  # GET /units/1/edit
-  def edit
-  end
-
-  # POST /units
-  # POST /units.json
+  # POST /groups/:group_id/units
   def create
-    @unit = Unit.new(unit_params)
-
-    respond_to do |format|
-      if @unit.save
-        format.html { redirect_to @unit, notice: 'Unit was successfully created.' }
-        format.json { render :show, status: :created, location: @unit }
-      else
-        format.html { render :new }
-        format.json { render json: @unit.errors, status: :unprocessable_entity }
-      end
-    end
+    @group.units.create!(unit_params)
+    json_response(@group, :created)
   end
 
-  # PATCH/PUT /units/1
-  # PATCH/PUT /units/1.json
-  def update
-    respond_to do |format|
-      if @unit.update(unit_params)
-        format.html { redirect_to @unit, notice: 'Unit was successfully updated.' }
-        format.json { render :show, status: :ok, location: @unit }
-      else
-        format.html { render :edit }
-        format.json { render json: @unit.errors, status: :unprocessable_entity }
-      end
-    end
+   # PUT /groups/:group_id/units/:id
+   def update
+    @unit.update(unit_params)
+    head :no_content
   end
 
-  # DELETE /units/1
-  # DELETE /units/1.json
+  # DELETE /groups/:group_id/units/:id
   def destroy
     @unit.destroy
-    respond_to do |format|
-      format.html { redirect_to units_url, notice: 'Unit was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    head :no_content
+  end
+
+  def search
+    @units = UnitsIndex.query(query_string: { fields: [:unit_code, :area, :price], query: search_params[:query], default_operator: 'and' })
+
+     render json: @units.to_json, status: :ok
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_unit
-      @unit = Unit.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def unit_params
-      params.require(:unit).permit(:unit_code, :area, :price)
-    end
+  def unit_params
+    params.permit(:unit_code, :area, :price)
+  end
+
+  def set_group
+    @group = Group.find(params[:group_id])
+  end
+
+  def set_group_unit
+    @unit = @group.units.find_by!(id: params[:id]) if @group
+  end
+
+  def search_params
+    params.permit(:query, :page, :per)
+  end
 end

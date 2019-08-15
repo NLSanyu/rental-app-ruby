@@ -1,8 +1,14 @@
 Rails.application.routes.draw do
-  resources :groups do
-    get :search, on: :collection
-    resources :units do
-      get :search, on: :collection
+  namespace :api do
+    namespace :v1 do
+      resources :groups do
+        get :search, on: :collection
+        resources :units do
+          get :search, on: :collection
+        end
+      end
     end
   end
 end
+
+
