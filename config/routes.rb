@@ -1,3 +1,14 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  namespace :api do
+    namespace :v1 do
+      resources :groups do
+        get :search, on: :collection
+        resources :units do
+          get :search, on: :collection
+        end
+      end
+    end
+  end
 end
+
+
