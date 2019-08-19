@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Api::V1::GroupsController < Api::V1::BaseController
-  before_action :set_group, only: [:show, :update, :destroy]
+  before_action :set_group, only: %i[show update destroy]
 
   # GET /groups
   def index
@@ -31,7 +33,7 @@ class Api::V1::GroupsController < Api::V1::BaseController
   end
 
   def search
-    @groups = GroupsIndex.query(query_string: { fields: [:group_code, :name, :location, :description], query: search_params[:query], default_operator: 'and' })
+    @groups = GroupsIndex.query(query_string: { fields: %i[group_code name location description], query: search_params[:query], default_operator: 'and' })
 
     render json: @groups.to_json, status: :ok
   end
@@ -50,5 +52,4 @@ class Api::V1::GroupsController < Api::V1::BaseController
   def search_params
     params.permit(:query, :page, :per)
   end
-
 end
