@@ -1,4 +1,4 @@
-POSTGRES_USER: 'lydia'
+POSTGRES_USER: 'postgres'
 POSTGRES_PASSWORD: 'memine'
 POSTGRES_HOST: 'localhost'
 POSTGRES_DB: 'rental-db'
