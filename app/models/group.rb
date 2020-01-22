@@ -5,5 +5,6 @@ class Group < ApplicationRecord
 
   has_many :units, dependent: :destroy
 
-  # add validations
+  # add more validations
+
 end
