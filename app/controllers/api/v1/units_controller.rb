@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Api::V1::UnitsController < Api::V1::BaseController
   before_action :set_group
-  before_action :set_group_unit, only: [:show, :update, :destroy]
+  before_action :set_group_unit, only: %i[show update destroy]
 
   # GET /groups/:group_id/units
   def index
@@ -18,11 +20,11 @@ class Api::V1::UnitsController < Api::V1::BaseController
     json_response(@group, :created)
   end
 
-   # PUT /groups/:group_id/units/:id
-   def update
+  # PUT /groups/:group_id/units/:id
+  def update
     @unit.update(unit_params)
     head :no_content
-  end
+ end
 
   # DELETE /groups/:group_id/units/:id
   def destroy
@@ -31,9 +33,9 @@ class Api::V1::UnitsController < Api::V1::BaseController
   end
 
   def search
-    @units = UnitsIndex.query(query_string: { fields: [:unit_code, :area, :price], query: search_params[:query], default_operator: 'and' })
+    @units = UnitsIndex.query(query_string: { fields: %i[unit_code area price], query: search_params[:query], default_operator: 'and' })
 
-     render json: @units.to_json, status: :ok
+    render json: @units.to_json, status: :ok
   end
 
   private
